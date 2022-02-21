@@ -1,0 +1,17 @@
+#bground{
+    margin: 0;
+    padding: 0;
+    height:100%;
+    width: 100%;
+}
+
+.navbar-brand{
+    color: white;
+    margin:0.5rem;
+}
+.navbar-brand:hover{
+    color: #929AAB;
+}
+.navbar-logo{
+    margin: 0.5rem;
+}
