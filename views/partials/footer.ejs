@@ -1,3 +1,16 @@
 <script src="js/home.js"></script>
+ 
+<script>
+if(<%= login_value %> ===true)
+    {
+      $( "#signupbtn" ).remove();
+    
+    }
+    else 
+    {
+      $( "#logoutbtn" ).remove();
+      $( "#profilebtn" ).remove();
+    
+    }</script>
 </body>
 </html>

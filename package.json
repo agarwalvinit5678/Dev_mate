@@ -8,7 +8,10 @@
     "jquery": "^3.6.0",
     "lodash": "^4.17.21",
     "mongoose": "^6.2.2",
+    "mongoose-findorcreate": "^3.0.0",
     "nodemon": "^2.0.15",
+    "passport": "^0.5.2",
+    "passport-github2": "^0.1.12",
     "request": "^2.88.2"
   }
 }
