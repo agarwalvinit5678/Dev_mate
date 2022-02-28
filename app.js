@@ -13,8 +13,15 @@ const findOrCreate=require('mongoose-findorcreate');
 const request = require('request');
 const { json } = require('body-parser');
 const res = require('express/lib/response');
+const { forEach } = require('lodash');
 const GitHubStrategy = require('passport-github2').Strategy;
 var login_value=false;
+var searchvalue=false;
+var accessToken1="";
+var OrgData  = [];
+var xlength=0;
+var ylength=0;
+var zlength=0;
 
 app.use(session({
   secret:"this is secret",
@@ -45,6 +52,8 @@ passport.use(new GitHubStrategy({
   callbackURL: "http://localhost:3000/auth/github/callback"
 },
 function(accessToken, refreshToken, profile, done) {
+  accessToken1="Bearer "+accessToken;
+  console.log(accessToken1);
   User.findOrCreate({ githubId: profile.id }, function (err, user) {
     return done(err, user);
   });
@@ -58,7 +67,7 @@ app.get('/auth/github/callback',
   passport.authenticate('github', { failureRedirect: '/login' }),
   function(req, res) {
     // Successful authentication, redirect home.
-    res.redirect('/');
+    res.redirect('/input');
   });
 
  
@@ -67,29 +76,26 @@ app.set('view engine', 'ejs');
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
-app.get("/",function(req,res){
-res.render("home",{login_value:req.isAuthenticated()});
-if(req.isAuthenticated())
-{
-  var options = {
-    // url:"https://api.github.com/users/agarwalvinit5678/repos",
-    url:"https://api.github.com/user/orgs",
-    method: 'GET',
-    headers: {'user-agent': 'node.js'}
-};
-  request(options, function (error, response, body) {
-    console.log(body);
-    if (!error && response.statusCode == 200) {
-      console.log(body) // Show the HTML for the Google homepage.
-      var data=JSON.parse(body);
-      
-          console.log(data); 
-    }
-  });
-}
-
+app.get("/input",function(req,res)
+{ if(req.isAuthenticated())
+  res.render("input",{login_value:req.isAuthenticated()});
+  else
+  res.render("home",{login_value:req.isAuthenticated()});
+  
 });
 
+app.get("/",function(req,res)
+{
+  res.render("home",{login_value:req.isAuthenticated()});
+});
+app.get("/output",function(req,res)
+{
+  if(req.isAuthenticated())
+  res.render("output",{login_value:req.isAuthenticated()});
+  else
+  res.render("home",{login_value:req.isAuthenticated()});
+  
+});
 app.get('/profile', function(req, res){
 
   res.redirect('/');
@@ -97,6 +103,106 @@ app.get('/profile', function(req, res){
 app.get('/logout', function(req, res){
   req.logout();
   res.redirect('/');
+});
+app.post("/input",function(req,res){
+  if(req.isAuthenticated()==false)
+  res.render("home",{login_value:req.isAuthenticated()});
+  else
+  {
+    {
+
+      var options = {
+        'method': 'GET',
+        'url': 'https://api.github.com/user/orgs',
+        'headers': {
+          'user-agent': 'node.js',
+          'Authorization': accessToken1,
+        }
+      };
+      request(options, function (error, response) 
+      {
+        if (error) throw new Error(error);
+        var dataorg=JSON.parse(response.body);
+        //console.log(data);
+         xlength = Object.keys(dataorg).length;
+        for (var x=0;x<xlength;x++) 
+        {
+          // var temp = {};
+          const repodata=[];
+          //console.log(data[x].url);
+          var request = require('request');
+          var urlmember=dataorg[x].url+'/members';
+          var options = {
+            'method': 'GET',
+            'url': urlmember,
+            'headers': {
+              'user-agent': 'node.js',
+              'Authorization': accessToken1,
+            }
+          };
+          request(options, function (error, response) 
+          {
+            if (error) throw new Error(error);
+            var datauser=JSON.parse(response.body);
+             ylength = Object.keys(datauser).length;
+            for (var y=0;y<ylength;y++) 
+              {
+                var options = 
+                {
+                  'method': 'GET',
+                  'url': datauser[y].repos_url,
+                  'headers': {
+                    'user-agent': 'node.js',
+                    'Authorization': accessToken1,
+                  }
+                };
+                request(options, function (error, response) 
+                {
+                    if (error) throw new Error(error);
+                    var datarepo=JSON.parse(response.body);
+                     zlength = Object.keys(datarepo).length;
+                    for (var z=0;z<zlength;z++) 
+                      
+                        {
+                            var options = {
+                              'method': 'GET',
+                              'url': datarepo[z].languages_url,
+                              'headers': {
+                                'user-agent': 'node.js',
+                              'Authorization': accessToken1,
+                              }
+                            };
+                            var datalanguage={};
+                            request(options, function (error, response) {
+                              if (error) throw new Error(error);
+                              datalanguage=JSON.parse(response.body);
+                              
+                            });
+                           if(datalanguage["res.languagetosearch"]!==undefined)
+                           console.log(datalanguage);
+                          repodata.push(datarepo[z]);
+                            
+                        }
+                        //console.log("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
+                        //console.log(repodata); 
+                  
+                });
+                console.log("break");
+                
+              }
+
+          });
+          //console.log(repodata);
+          //OrgData.push(repodata);
+        } 
+      });
+      //console.log(OrgData);
+      //console.log("hello");
+    }
+
+    res.redirect("/output");
+  }
+
 });
 
 app.listen(3000, function() {

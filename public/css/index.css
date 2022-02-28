@@ -1,4 +1,8 @@
-#bground{
+html{
+  overflow: hidden;
+}
+#bground
+{
     margin: 0;
     padding: 0;
     height:100%;
@@ -14,4 +18,120 @@
 }
 .navbar-logo{
     margin: 0.5rem;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100vh;
+    max-width: 1600px;
+    padding: 0 15px;
+    margin: auto auto;
+  }
+  input {
+    border-style: none;
+    background: transparent;
+    outline: none;
+  }
+  button {
+    padding: 0;
+    background: none;
+    border: none;
+    outline: none;
+  }
+  .webflow-style-input {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    max-width: 400px;
+    margin: 10rem auto;
+    border-radius: 2px;
+    padding: 1.4rem 2rem 1.6rem;
+    background: #282828d5;
+    box-shadow: 0 8px 32px 0 #ffffff16;
+    
+    
+  }
+  
+  .webflow-style-input input {
+    flex-grow: 1;
+    color: whitesmoke;
+    font-size: 1.8rem;
+    line-height: 2.4rem;
+    vertical-align: middle;
+    
+  }
+  .webflow-style-input input::-webkit-input-placeholder {
+    color: #d8cfcfd0;
+  }
+  
+  .webflow-style-input button {
+    color: #d8cfcfd0;
+    font-size: 2.4rem;
+    line-height: 2.4rem;
+    vertical-align: middle;
+    transition: color 0.25s;
+   
+  }
+  .webflow-style-input button:hover {
+    color: #d8cfcf;
+  }
+.outputfilecontainer{
+  margin:0rem 1rem;
+  padding:0rem 1rem;
+}
+.outputfilecontainer2{
+  margin:0rem -2.2rem 0rem -2rem;
+  
+}
+.searchtablecontainer{
+  margin:0rem 1rem;
+  padding:0rem 1rem;
+  background: #282828d5;
+    box-shadow: 0 8px 32px 0 #ffffff16;
+}
+html {
+  overflow: -moz-scrollbars-vertical;
+  overflow-y: scroll;
+}
+p {
+  color: #33CC00;
+  font-family: monospace, monospace;
+  letter-spacing: 0.1em;
+}
+label {
+  letter-spacing: 0.1em;
+}
+input[type="text"] {
+  
+  color: #4EE420;
+  outline: none;
+  border: 0;
+  padding-left: 0.5em;
+  font-weight: lighter;
+}
+input[type="text"]:focus {
+  outline: none;
+  border: 0;
+  box-shadow: 0 0 10px #719ECE;
+  padding-left: 0.5em;
+  font-weight: lighter;
+}
+table {
+  font-family: Arial, sans-serif;
+}
+thead {
+  letter-spacing: 0.2em;
+  word-spacing: 0.25em;
+}
+#tableBody {
+  letter-spacing: 0.1em;
+  word-spacing: 0.25em;
+  font-size: 0.75em;
+}
+#searchBox{
+  background-color:#353232;
+  box-shadow:  0 0 10px #ffffff88;
 }

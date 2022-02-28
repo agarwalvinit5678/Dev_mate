@@ -1,0 +1,116 @@
+<%- include('partials/header.ejs') %>
+<div class="outputfilecontainer" style="overflow:scroll; height:80%;overflow: hidden; ">
+<div class="outputfilecontainer2" style="overflow:scroll; height:100%;overflow-x: hidden; ">
+    <body class="">
+        
+    
+        <!-- start table -->
+        <div class="searchtablecontainer mt-2 mb-2  rounded">
+            <div class="row">
+                <div class="col-6 text-left" data-aos="fade-right">
+                    <p class="ms-2 mt-2 pt-2">Users Found</p>
+                </div>
+                <div class="col-6 text-right" data-aos="fade-left">
+                    <label class="text-muted" for="searchBox">SEARCH:</label>
+                    <input class="mt-3 mb-2" type="text" id="searchBox" name="searchBox" required maxlength="255">
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-md-12  rounded shadow-lg text-start" data-aos="zoom-out">
+                    <div>
+                        <table class="table table-dark table-hover table-responsive table-striped table-sm table-hover">
+                            <thead>
+                                <tr class="d-flex">
+                                    <th class="col-4">Name</th>
+                                    <th class="col-4">Organisation</th>
+                                    <th class="col-4">Repoisitory</th>
+                                   
+                                </tr>
+                            </thead>
+                            <tbody id="tableBody" data-aos="flip-up">
+                                &emsp;
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end table -->
+    
+        <br><br>
+    </body>
+    
+</div>
+</div>
+<script>
+    // https://github.com/rootVIII/searchable_bootstrap_table
+
+// noinspection JSValidateTypes
+class SearchableTable {
+    constructor(tableData) {
+        this.tableData = tableData;
+        this.tableBody = document.getElementById('tableBody');
+        this.searchBox = document.getElementById('searchBox');
+        document.addEventListener('keyup', this.updateTable.bind(this), false);
+    }
+
+    loadTableData(searchText = null) {
+        return new Promise((resolve) => {
+            let tableRows = '';
+            for (let row of this.tableData) {
+                if (!(searchText) || row.join(' ').includes(searchText)) {
+                    let [name, organisation, repoisitory,] = row;
+                    tableRows += `<tr class="d-flex">
+                        <th class="col-4">${name}</th>
+                        <td class="col-4">${organisation}</td>
+                        <td class="col-4">${repoisitory}</td>
+                        </tr>`;
+                }
+            }
+            resolve(tableRows);
+        });
+    }
+
+    init_table() {
+        this.loadTableData().then((tableRows) => {
+            this.tableBody.innerHTML = tableRows;
+        }).catch((err) => {
+            console.log(err);
+        });
+    }
+
+    updateTable() {
+        const inputText = this.searchBox.value.trim();
+        if (!(inputText.length)) {
+            this.init_table();
+        } else {
+            this.loadTableData(inputText).then((tableRows) => {
+                this.tableBody.innerHTML = tableRows;
+            }).catch((err) => {
+                console.log(err);
+            });
+        }
+    }
+}
+
+function getTableData() {
+    // simulate fetching table data from the back-end:
+    return [
+    ['Vinit', 'IIITP', 'dev_mate'],['Vinit', 'IIITP', 'dev_mate'],['Vinit', 'IIITP', 'dev_mate'],['Vinit', 'IIITP', 'dev_mate'],['Vinit', 'IIITP', 'dev_mate'],['Vinit', 'IIITP', 'dev_mate'],['Vinit', 'IIITP', 'dev_mate'],['Vinit', 'IIITP', 'dev_mate'],['Vinit', 'IIITP', 'dev_mate'],['Vinit', 'IIITP', 'dev_mate'],['Vinit', 'IIITP', 'dev_mate'],['Vinit', 'IIITP', 'dev_mate'],['Vinit', 'IIITP', 'dev_mate'],['Vinit', 'IIITP', 'dev_mate'],['Vinit', 'IIITP', 'dev_mate'],['Vinit', 'IIITP', 'dev_mate'],['Vinit', 'IIITP', 'dev_mate'],['Vinit', 'IIITP', 'dev_mate'],['Vinit', 'IIITP', 'dev_mate'],['Vinit', 'IIITP', 'dev_mate'],['Vinit', 'IIITP', 'dev_mate'],['Vinit', 'IIITP', 'dev_mate'],['Vinit', 'IIITP', 'dev_mate'],['Vinit', 'IIITP', 'dev_mate'],['Vinit', 'IIITP', 'dev_mate'],['Vinit', 'IIITP', 'dev_mate'],['Vinit', 'IIITP', 'dev_mate'],['Vinit', 'IIITP', 'dev_mate'],['Vinit', 'IIITP', 'dev_mate'],['Vinit', 'IIITP', 'dev_mate'],['Vinit', 'IIITP', 'dev_mate'],['Vinit', 'IIITP', 'dev_mate'],['Vinit', 'IIITP', 'dev_mate'],   
+];
+}
+
+function main() {
+    let searchableTable;
+
+    document.addEventListener('DOMContentLoaded', () => {
+        searchableTable = new SearchableTable(getTableData());
+        searchableTable.init_table();
+    });
+}
+
+main();
+
+</script>
+
+<%- include('partials/footer.ejs') %>
